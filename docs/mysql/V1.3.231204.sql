@@ -1,0 +1,25 @@
+DROP TABLE IF EXISTS cms_article;
+CREATE TABLE cms_article(
+                            id VARCHAR(19) NOT NULL   COMMENT 'ID' ,
+                            title VARCHAR(128) NOT NULL   COMMENT '文章标题' ,
+                            sub_title VARCHAR(255)    COMMENT '文章副标题' ,
+                            custom_url VARCHAR(255)    COMMENT '自定义路径' ,
+                            cover_image VARCHAR(255)    COMMENT '文章封面图' ,
+                            summary VARCHAR(255)    COMMENT '文章摘要' ,
+                            content TEXT NOT NULL   COMMENT '文章内容' ,
+                            category_id VARCHAR(19) NOT NULL   COMMENT '文章分类ID' ,
+                            category_name VARCHAR(128) NOT NULL   COMMENT '文章分类名称' ,
+                            type INT2 NOT NULL   COMMENT '文章类型（1原创 2转载 3翻译）' ,
+                            comment INT2    COMMENT '开启评论（0关闭 1开启）' ,
+                            status INT2    COMMENT '是否启用（0草稿 1发布）' ,
+                            deleted INT2    COMMENT '是否删除（0正常 1删除）' ,
+                            views INT8    COMMENT '阅读量' ,
+                            revision INT8    COMMENT '乐观锁' ,
+                            group_tenant_id VARCHAR(19)    COMMENT '集团租户ID' ,
+                            company_tenant_id VARCHAR(19)    COMMENT '公司租户ID' ,
+                            created_by VARCHAR(64)    COMMENT '创建人' ,
+                            created_at TIMESTAMP    COMMENT '创建时间' ,
+                            updated_by VARCHAR(64)    COMMENT '更新人' ,
+                            updated_at TIMESTAMP    COMMENT '更新时间' ,
+                            PRIMARY KEY (id)
+)  COMMENT = '文章内容';
