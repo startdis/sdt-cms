@@ -1,25 +1,18 @@
 package com.startdis.cms.web.controller;
 
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.xiaoymin.knife4j.annotations.ApiSort;
 import com.startdis.cms.domain.model.converter.ArticleConverter;
-import com.startdis.cms.domain.model.converter.ArticleTagsConverter;
 import com.startdis.cms.domain.model.dto.post.ArticlePostDTO;
-import com.startdis.cms.domain.model.dto.post.ArticleTagsPostDTO;
 import com.startdis.cms.domain.model.dto.put.ArticlePutDTO;
 import com.startdis.cms.domain.model.entity.Article;
-import com.startdis.cms.domain.model.entity.ArticleTags;
-import com.startdis.cms.domain.model.entity.Tag;
 import com.startdis.cms.domain.model.query.ArticleQuery;
 import com.startdis.cms.domain.model.vo.ArticleVO;
 import com.startdis.cms.domain.model.vo.TagVO;
 import com.startdis.cms.server.service.ArticleService;
 import com.startdis.cms.server.service.ArticleTagsService;
-import com.startdis.cms.server.service.TagService;
 import com.startdis.comm.domain.bean.PagerBean;
 import com.startdis.comm.domain.bean.ResultBean;
 import com.startdis.comm.domain.model.PageQuery;
@@ -27,18 +20,13 @@ import com.startdis.comm.util.bean.BeanCopyKits;
 import com.startdis.comm.util.id.SnowflakeIDUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.constraints.NotBlank;
-import java.sql.Wrapper;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * @author DianJiu
@@ -70,12 +58,7 @@ public class ArticleController {
     @GetMapping("{id}")
     @ApiOperation("查询单条")
     public ResultBean<ArticleVO> get(@PathVariable @Validated @NotBlank(message = "ID不能为空") String id) {
-        Article article = articleService.getById(id);
-        //处理格式转换
-        ArticleVO articleVO = ArticleConverter.INSTANT.entityToVO(article);
-        //组装文章标签
-        List<TagVO> tagVOS = articleService.builderTags(id);
-        articleVO.setArticleTags(tagVOS);
+        ArticleVO articleVO = articleService.getByInfoId(id);
         return ResultBean.success(articleVO);
     }
 

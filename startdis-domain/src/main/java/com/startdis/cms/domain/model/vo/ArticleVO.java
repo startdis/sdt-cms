@@ -1,6 +1,7 @@
 package com.startdis.cms.domain.model.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.startdis.cms.domain.model.entity.FileInfo;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
@@ -137,5 +138,9 @@ public class ArticleVO implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @ApiModelProperty("更新时间")
     private LocalDateTime updatedAt;
-
+    /**
+     * 文章封面图文件对象
+     */
+    @ApiModelProperty("文章封面图文件对象")
+    private List<FileInfo> coverImageList;
 }

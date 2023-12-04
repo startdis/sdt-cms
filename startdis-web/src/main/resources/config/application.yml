@@ -1,6 +1,6 @@
 # 服务端口号
 server:
-  port: 18081
+  port: 18089
   # tomcat 配置
   tomcat:
     # tomcat的URI编码

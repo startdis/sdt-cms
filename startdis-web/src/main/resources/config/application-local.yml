@@ -55,13 +55,13 @@ spring:
 # MinIO
 minio:
   #对象存储服务的URL
-  url: http://146.56.199.179:29000
+  url: http://1.13.21.54:9000
   #账户
-  accessKey: admin
+  accessKey: ydsz
   #密码
-  secretKey: admin123456
+  secretKey: ydsz1020
   #存储桶
-  bucketName: ydsz-fam-local
+  bucketName: tdcd-local
 
 # 异步线程配置
 async:

@@ -1,18 +1,12 @@
 package com.startdis.cms.server.service;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.startdis.cms.domain.model.dto.post.ArticleTagsPostDTO;
-import com.startdis.cms.domain.model.dto.put.ArticlePutDTO;
 import com.startdis.cms.domain.model.entity.Article;
-import com.startdis.cms.domain.model.entity.ArticleTags;
-import com.startdis.cms.domain.model.entity.Tag;
+import com.startdis.cms.domain.model.vo.ArticleVO;
 import com.startdis.cms.domain.model.vo.TagVO;
 
-import javax.annotation.Resource;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author DianJiu
@@ -25,4 +19,6 @@ public interface ArticleService extends IService<Article> {
     void saveArticleTags(List<ArticleTagsPostDTO> articleTags, String articleId);
 
     void deleteArticleTag(String articleId);
+
+    ArticleVO getByInfoId(String id);
 }
