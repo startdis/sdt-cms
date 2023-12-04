@@ -15,6 +15,7 @@ import com.startdis.comm.domain.bean.PagerBean;
 import com.startdis.comm.domain.bean.ResultBean;
 import com.startdis.comm.domain.model.PageQuery;
 import com.startdis.comm.util.bean.BeanCopyKits;
+import com.startdis.comm.util.id.SnowflakeIDUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.validation.annotation.Validated;
@@ -22,7 +23,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.constraints.NotBlank;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author DianJiu
@@ -102,11 +105,17 @@ public class TagController {
      */
     @PostMapping("/add")
     @ApiOperation("新增数据")
-    public ResultBean<Boolean> insert(@RequestBody @Validated TagPostDTO tagDTO) {
+    public ResultBean<Map<String, String>> insert(@RequestBody @Validated TagPostDTO tagDTO) {
         //处理格式转换
         Tag tag = TagConverter.INSTANT.postDtoToEntity(tagDTO);
         //执行数据保存
-        return ResultBean.success(tagService.save(tag));
+        String id = SnowflakeIDUtils.getInstance().nextIdStr();
+        tag.setId(id);
+        tagService.save(tag);
+        Map<String, String> map = new HashMap<>();
+        map.put("tagId", id);
+        map.put("tagName", tagDTO.getName());
+        return ResultBean.success(map);
     }
 
     /**
