@@ -13,11 +13,11 @@ Github：https://github.com/startdis/sdt-cms
 Gitlab：https://gitlab.com/startdis/sdt-cms
 
 ### 关于启迪
-启迪平台：https://startdis.com
+启迪平台：https://startdis.com  
 
-项目文档：https://cms.startdis.cn
+项目文档：https://startdis.com/docs/cms  
 
-体验地址：https://demo.cms.startdis.cn  
+体验地址：https://cms.startdis.top  
 - startdis/startdis2022
 
 ## 系统模块
