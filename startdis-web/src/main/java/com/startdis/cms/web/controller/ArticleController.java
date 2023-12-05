@@ -1,6 +1,7 @@
 package com.startdis.cms.web.controller;
 
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.xiaoymin.knife4j.annotations.ApiSort;
@@ -127,8 +128,10 @@ public class ArticleController {
         String id = SnowflakeIDUtils.getInstance().nextIdStr();
         article.setId(id);
         articleService.save(article);
-        //保存文章标签
-        articleService.saveArticleTags(articleDTO.getArticleTags(), id);
+        if (CollectionUtil.isNotEmpty(articleDTO.getArticleTags())){
+            //保存文章标签
+            articleService.saveArticleTags(articleDTO.getArticleTags(), id);
+        }
         return ResultBean.success("新增文章成功！");
     }
 
@@ -148,7 +151,10 @@ public class ArticleController {
         articleService.updateById(article);
         //保存文章标签
         articleService.deleteArticleTag(articleDTO.getId());
-        articleService.saveArticleTags(articleDTO.getArticleTags(), articleDTO.getId());
+        if (CollectionUtil.isNotEmpty(articleDTO.getArticleTags())){
+            //保存文章标签
+            articleService.saveArticleTags(articleDTO.getArticleTags(), articleDTO.getId());
+        }
         return ResultBean.success("更新文章成功！");
     }
 

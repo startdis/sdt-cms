@@ -32,6 +32,11 @@ public class Category extends BaseEntity {
     private String name;
 
     /**
+     * 分类别名
+     */
+    private String alias;
+
+    /**
      * 分类图标
      */
     private String icon;

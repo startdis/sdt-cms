@@ -36,6 +36,11 @@ public class CategoryQuery implements Serializable {
     @ApiModelProperty("分类名称")
     private String name;
     /**
+     * 分类别名
+     */
+    @ApiModelProperty("分类别名")
+    private String alias;
+    /**
      * 分类图标
      */
     @ApiModelProperty("分类图标")
