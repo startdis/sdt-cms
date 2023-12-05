@@ -1,7 +1,11 @@
 package com.startdis.cms.web.controller;
 
 
+import cn.hutool.core.collection.CollectionUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.xiaoymin.knife4j.annotations.ApiSort;
 import com.startdis.cms.domain.model.converter.TagConverter;
@@ -11,9 +15,11 @@ import com.startdis.cms.domain.model.entity.Tag;
 import com.startdis.cms.domain.model.query.TagQuery;
 import com.startdis.cms.domain.model.vo.TagVO;
 import com.startdis.cms.server.service.TagService;
+import com.startdis.comm.core.constant.Constants;
 import com.startdis.comm.domain.bean.PagerBean;
 import com.startdis.comm.domain.bean.ResultBean;
 import com.startdis.comm.domain.model.PageQuery;
+import com.startdis.comm.exception.custom.BusinessException;
 import com.startdis.comm.util.bean.BeanCopyKits;
 import com.startdis.comm.util.id.SnowflakeIDUtils;
 import io.swagger.annotations.Api;
@@ -109,6 +115,7 @@ public class TagController {
         //处理格式转换
         Tag tag = TagConverter.INSTANT.postDtoToEntity(tagDTO);
         //执行数据保存
+        checkExist(tag);
         String id = SnowflakeIDUtils.getInstance().nextIdStr();
         tag.setId(id);
         tagService.save(tag);
@@ -130,6 +137,7 @@ public class TagController {
         //处理格式转换
         Tag tag = TagConverter.INSTANT.putDtoToEntity(tagDTO);
         //执行数据更新
+        checkExist(tag);
         return ResultBean.success(tagService.updateById(tag));
     }
 
@@ -145,5 +153,15 @@ public class TagController {
         return ResultBean.success(tagService.removeByIds(ids));
     }
 
+    private void checkExist(Tag tag){
+        LambdaQueryWrapper<Tag> wrapper = Wrappers.<Tag>lambdaQuery().eq(Tag::getName, tag.getName());
+        if (StringUtils.isNotEmpty(tag.getId())){
+            wrapper.ne(Tag::getId, tag.getId());
+        }
+        List<Tag> list = tagService.list(wrapper);
+        if (CollectionUtil.isNotEmpty(list)){
+            throw new BusinessException(Constants.ERROR, "标签名称已存在，请勿重复添加！");
+        }
+    }
 }
 
