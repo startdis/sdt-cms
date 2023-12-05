@@ -21,17 +21,16 @@ pnpm-debug.log*
 
 # Editor directories and files
 .idea
-.vscode
+# .vscode
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
-cms-dist
+
 package-lock.json
 pnpm-lock.yaml
 
 .history
 
 !**/form-making/dist/
-
