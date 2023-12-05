@@ -27,7 +27,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.constraints.NotBlank;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author DianJiu
@@ -121,7 +123,7 @@ public class ArticleController {
     @PostMapping("/add")
     @ApiOperation("新增数据")
     @Transactional(rollbackFor = Exception.class,transactionManager = "transactionManager")
-    public ResultBean<Boolean> insert(@RequestBody @Validated ArticlePostDTO articleDTO) {
+    public ResultBean<Map<String, String>> insert(@RequestBody @Validated ArticlePostDTO articleDTO) {
         //处理格式转换
         Article article = ArticleConverter.INSTANT.postDtoToEntity(articleDTO);
         //执行数据保存
@@ -132,7 +134,9 @@ public class ArticleController {
             //保存文章标签
             articleService.saveArticleTags(articleDTO.getArticleTags(), id);
         }
-        return ResultBean.success("新增文章成功！");
+        Map<String, String> map = new HashMap<>();
+        map.put("articleId", id);
+        return ResultBean.success(map);
     }
 
     /**
@@ -144,7 +148,7 @@ public class ArticleController {
     @PutMapping("/update")
     @ApiOperation("修改数据")
     @Transactional(rollbackFor = Exception.class,transactionManager = "transactionManager")
-    public ResultBean<Boolean> update(@RequestBody @Validated ArticlePutDTO articleDTO) {
+    public ResultBean<Map<String, String>> update(@RequestBody @Validated ArticlePutDTO articleDTO) {
         //处理格式转换
         Article article = ArticleConverter.INSTANT.putDtoToEntity(articleDTO);
         //执行数据更新
@@ -155,7 +159,9 @@ public class ArticleController {
             //保存文章标签
             articleService.saveArticleTags(articleDTO.getArticleTags(), articleDTO.getId());
         }
-        return ResultBean.success("更新文章成功！");
+        Map<String, String> map = new HashMap<>();
+        map.put("articleId", article.getId());
+        return ResultBean.success(map);
     }
 
     /**
