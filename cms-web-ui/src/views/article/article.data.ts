@@ -13,6 +13,13 @@ export const columns: BasicColumn[] = [
     align: 'left',
     sorter: false
   },
+  {
+    title: '摘要',
+    dataIndex: 'summary',
+    width: 100,
+    align: 'left',
+    sorter: false
+  },
   // {
   //   title: '文章封面图',
   //   dataIndex: 'coverImage',
@@ -63,6 +70,20 @@ export const columns: BasicColumn[] = [
       return h(Tag, { color: color }, () => text);
     },
   },
+  {
+    title: '创建时间',
+    dataIndex: 'createdAt',
+    width: 100,
+    align: 'left',
+    sorter: false
+  },
+  {
+    title: '更新时间',
+    dataIndex: 'updatedAt',
+    width: 100,
+    align: 'left',
+    sorter: false
+  }
 ];
 
 export const searchFormSchema: FormSchema[] = [
@@ -108,18 +129,6 @@ export const formSchema: FormSchema[] = [
     },
   },
   {
-    field: 'content',
-    label: '',
-    required: true,
-    component: 'Tinymce',
-    componentProps: {
-      height:700
-    },
-    colProps: {
-      span: 24,
-    },
-  },
-  {
     field: 'status',
     label: '',
     required: false,
@@ -127,6 +136,50 @@ export const formSchema: FormSchema[] = [
     component: 'Input',
     colProps: {
       span: 12,
+    },
+  }
+];
+export const formSchemaEditor: FormSchema[] = [
+  {
+    field: 'content',
+    label: '',
+    required: true,
+    component: 'Tinymce',
+    componentProps: {
+      height: 700,
+      showImageUpload:false,
+      options: {
+        placeholder: '请输入文章内容',
+        componentType: 'Editor',
+        changComponentType: (E) => {
+          
+        }
+      },
+    },
+    colProps: {
+      span: 24,
+    },
+  },
+];
+export const formSchemaMd: FormSchema[] = [
+  {
+    field: 'content',
+    label: '',
+    required: true,
+    component: 'MarkDown',
+    componentProps: {
+      height: 700,
+      showImageUpload:false,
+      options: {
+        placeholder: '请输入文章内容',
+        componentType: 'MD',
+        changComponentType: (E) => {
+          
+        }
+      },
+    },
+    colProps: {
+      span: 24,
     },
   },
 ];
@@ -141,39 +194,16 @@ export const formSchemaEnd: FormSchema[] = [
       span: 12,
     },
   },
-  // {
-  //   field: 'title',
-  //   label: '文章标题',
-  //   required: true,
-  //   component: 'Input',
-  //   show:false,
-  //   colProps: {
-  //     span: 24,
-  //   },
-  // },
-  // {
-  //   field: 'content',
-  //   label: '文章内容',
-  //   required: true,
-  //   component: 'Tinymce',
-  //   show:false,
-  //   componentProps: {
-  //     height:700
-  //   },
-  //   colProps: {
-  //     span: 24,
-  //   },
-  // },
-  // {
-  //   field: 'status',
-  //   label: '',
-  //   required: false,
-  //   show:false,
-  //   component: 'Input',
-  //   colProps: {
-  //     span: 12,
-  //   },
-  // },
+  {
+    field: 'title',
+    label: '文章标题',
+    required: true,
+    component: 'Input',
+    show:false,
+    colProps: {
+      span: 24,
+    },
+  },
   {
     field: 'coverImage',
     label: '封面图',

@@ -4,6 +4,11 @@
       <template #toolbar>
         <a-button type="primary" @click="handleCreate"> 新增 </a-button>
       </template>
+      <template #bodyCell="{ column, record }">
+        <template v-if="column.key === 'status'">
+            <Switch :checked="record['status']" checkedChildren='启用' unCheckedChildren='停用' :checkedValue='1' :unCheckedValue='0' @click="changeStatus(record)"></Switch>
+          </template>
+      </template>
       <template #action="{ record }">
         <TableAction
           :actions="[
@@ -33,11 +38,13 @@
   import { useModal } from '/@/components/Modal';
   import { columns, searchFormSchema } from './link.data';
   import linkModal from './linkModal.vue';
-  import { getlinkListByPage, getInfo,deleteByIds } from '/@/api/link/link.ts';
-
+  import { getlinkListByPage, getInfo,Update,deleteByIds } from '/@/api/link/link.ts';
+  import { useMessage } from '/@/hooks/web/useMessage';
+const {createWarningModal } = useMessage();
+import { Switch } from 'ant-design-vue';
   export default defineComponent({
     name: 'link',
-    components: { BasicTable, TableAction, PageWrapper ,linkModal },
+    components: { BasicTable, TableAction, PageWrapper ,Switch,linkModal },
     setup() {
       const [registerModal, { openModal,setModalProps }] = useModal();
       const [registerTable, { reload ,setLoading}] = useTable({
@@ -90,8 +97,40 @@
       function handleSuccess() {
         reload();
       }
+      function changeStatus(record) {
+        if (record.status) {
+          createWarningModal({
+            title: '提示',
+            content: '确认停用？',
+            onOk: () => {
+              setLoading(true)
+              Update({
+                id: record.id,
+                status:'0'
+              }).then(() => {
+                setLoading(false)
+                reload()
+              }).catch(() => {
+                setLoading(false)
+              })
+            }
+          })
+        } else {
+          setLoading(true)
+          Update({
+            id: record.id,
+            status:'1'
+          }).then(() => {
+            setLoading(false)
+            reload()
+          }).catch(() => {
+            setLoading(false)
+          })
+        }
+      }
 
       return {
+        changeStatus,
         registerTable,
         registerModal,
         handleCreate,

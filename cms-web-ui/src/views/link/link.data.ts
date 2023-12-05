@@ -47,12 +47,31 @@ export const columns: BasicColumn[] = [
     sorter: false
   },
   {
+    title: '是否启用',
+    dataIndex: 'status',
+    width: 60,
+  },
+  {
     title: '网站排序',
     dataIndex: 'sort',
     width: 100,
     align: 'left',
     sorter: false
   },
+  {
+    title: '创建时间',
+    dataIndex: 'createdAt',
+    width: 100,
+    align: 'left',
+    sorter: false
+  },
+  {
+    title: '更新时间',
+    dataIndex: 'updatedAt',
+    width: 100,
+    align: 'left',
+    sorter: false
+  }
 ];
 
 export const searchFormSchema: FormSchema[] = [
@@ -135,6 +154,21 @@ export const formSchema: FormSchema[] = [
     component: 'InputNumber',
     colProps: {
       span: 12,
+    },
+  },
+  {
+    field: 'status',
+    defaultValue:1,
+    label: '是否启用',
+    component: 'Switch',
+    componentProps:{
+      checkedChildren: '启用',
+      checkedValue: 1,
+      unCheckedValue:0,
+      unCheckedChildren: '禁用'
+    },
+    colProps: {
+      span: 24,
     },
   },
 ];

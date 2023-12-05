@@ -12,7 +12,7 @@ export type categoryInfo = {
     name?: 'string';
     icon?: 'string';
     sort?: 'string';
-    status?: 'string';
+    status?: number;
     deleted?: 'string';
     revision?: 'string';
     groupTenantId?: 'string';

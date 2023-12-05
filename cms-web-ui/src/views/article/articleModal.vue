@@ -8,30 +8,32 @@
               <span>标签</span>
             </div>
           </template>
-          <template #content v-loading="tagListLoading">
-            <Input
-              style="width: 400px"
-              v-model:value="tagValue"
-              placeholder="请输入文字搜索，Enter键入可添加自定义标签"
-              @pressEnter="pressEnter"
-              @change="tagValueChange"
-            >
-              <!-- <template #addonAfter>
-                <SearchOutlined class="ant-select-suffix" @click="getTagsList(tagValue)" />
-              </template> -->
-            </Input>
-            <!-- 所有的库中的标签 -->
-            <p class="m-4" style="width: 400px; height: 200px; overflow-y: auto">
-              <Tag
-                class="cursor-pointer mb"
-                style="margin-bottom: 0.5rem"
-                v-for="item in allTagList"
-                :key="item.id"
-                :color="getColor(item)"
-                @click="handleAddTag(item)"
-                >{{ item.name }}</Tag
+          <template #content>
+            <div v-loading="tagListLoading">
+              <Input
+                style="width: 400px"
+                v-model:value="tagValue"
+                placeholder="请输入文字搜索，Enter键入可添加自定义标签"
+                @pressEnter="pressEnter"
+                @change="tagValueChange"
               >
-            </p>
+                <!-- <template #addonAfter>
+                  <SearchOutlined class="ant-select-suffix" @click="getTagsList(tagValue)" />
+                </template> -->
+              </Input>
+              <!-- 所有的库中的标签 -->
+              <p class="m-4" style="width: 400px; height: 200px; overflow-y: auto">
+                <Tag
+                  class="cursor-pointer mb"
+                  style="margin-bottom: 0.5rem"
+                  v-for="item in allTagList"
+                  :key="item.id"
+                  :color="getColor(item)"
+                  @click="handleAddTag(item)"
+                  >{{ item.name }}</Tag
+                >
+              </p>
+            </div>
           </template>
           <div>
             <!-- 选择的标签 -->
@@ -60,7 +62,7 @@
       <div>
         <Button class="mr-4" shape="round" @click="cancel">取消</Button>
         <Button type="primary" shape="round" ghost class="mr-4" @click="handleSubmit(0)">保存草稿</Button>
-        <Button type="primary" shape="round"  @click="handleSubmit(1)">发布博客</Button>
+        <Button type="primary" shape="round"  @click="handleSubmit(1)">发布文章</Button>
       </div>
     </template>
   </BasicModal>
@@ -126,7 +128,6 @@ export default defineComponent({
             field: 'categoryId',
             componentProps: {
               onChange: (e: { label: string; value:string}) => {
-                console.log('ee', e);
                 clearValidate('categoryId');
                 setFieldsValue({
                   categoryName: e.label,
@@ -137,9 +138,9 @@ export default defineComponent({
           },
         ]);
       });
-      async function getTagsList(searchName?: string | undefined) {
+      async function getTagsList() {
         tagListLoading.value = true
-        allTagList.value = await gettagList({ name: searchName,status:1 });
+        allTagList.value = await gettagList({ status:1 });
         tagListLoading.value = false
       }
 
@@ -169,7 +170,7 @@ export default defineComponent({
                   .join(',')
               : values.coverImage,
         })
-          .then(() => {
+          .then((res) => {
             setModalProps({ loading: false });
             closeModal();
             if (status) {
@@ -198,14 +199,22 @@ export default defineComponent({
       // tag输入框值变化请求tag列表
       async function tagValueChange() {
         tagListLoading.value = true
-        let res: any = await gettagList({ name: tagValue.value,status:1 });
+        let params = { status: 1 }
+        if (tagValue.value) {
+          params.name = tagValue.value
+        }
+        let res: any = await gettagList(params);
         tagListLoading.value = false
         allTagList.value = res
       }
       // tags回车键事件 请求接口查询是否已经存在 否则就调用新增接口去新增获取到tagId
       async function pressEnter(e) {
         tagListLoading.value = true
-        let res: any = await gettagList({ name: e.target._value,status:1 });
+        let params = { status: 1 }
+        if (e.target._value) {
+          params.name = e.target._value
+        }
+        let res: any = await gettagList(params);
         tagListLoading.value = false
         if (res && res.length) {
           allTagList.value = res

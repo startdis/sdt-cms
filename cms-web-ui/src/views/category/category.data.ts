@@ -17,15 +17,41 @@ export const columns: BasicColumn[] = [
     align: 'left',
     fixed:'left'
   },
+  {
+    title: '别名',
+    dataIndex: 'alias',
+    width: 100,
+    align: 'left',
+    fixed:'left'
+  },
+  {
+    title: '是否启用',
+    dataIndex: 'status',
+    width: 60,
+  },
+  {
+    title: '排序',
+    dataIndex: 'sort',
+    width: 100,
+    align: 'left',
+  },
+  {
+    title: '创建时间',
+    dataIndex: 'createdAt',
+    width: 100,
+    align: 'left',
+    sorter: false
+  },
+  {
+    title: '更新时间',
+    dataIndex: 'updatedAt',
+    width: 100,
+    align: 'left',
+    sorter: false
+  }
   // {
   //   title: '所属上级类型',
   //   dataIndex: 'parentName',
-  //   width: 100,
-  //   align: 'left',
-  // },
-  // {
-  //   title: '排序',
-  //   dataIndex: 'sort',
   //   width: 100,
   //   align: 'left',
   // },
@@ -79,6 +105,18 @@ export const formSchema: FormSchema[] = [
         message: '字符长度不能大于32！',
       }],
   },
+  {
+    field: 'alias',
+    label: '别名',
+    required: false,
+    component: 'Input',
+    show: true,
+    rules: [
+      {
+        max: 32,
+        message: '字符长度不能大于32！',
+      }],
+  },
   // {
   //   field: 'code',
   //   label: '编码',
@@ -108,5 +146,20 @@ export const formSchema: FormSchema[] = [
     required: false,
     component: 'InputNumber',
     show: true,
+  },
+  {
+    field: 'status',
+    defaultValue:1,
+    label: '是否启用',
+    component: 'Switch',
+    componentProps:{
+      checkedChildren: '启用',
+      checkedValue: 1,
+      unCheckedValue:0,
+      unCheckedChildren: '禁用'
+    },
+    colProps: {
+      span: 24,
+    },
   },
 ];

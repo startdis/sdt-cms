@@ -32,8 +32,8 @@
   import { BasicTable, useTable, TableAction } from '/@/components/Table';
   import { useModal } from '/@/components/Modal';
   import { columns, searchFormSchema } from './article.data';
-import articleModal from './articleModal.vue';
-import { useRoute,useRouter } from 'vue-router'
+  import articleModal from './articleModal.vue';
+  import { useRoute,useRouter } from 'vue-router'
   import { getarticleListByPage, getInfo,deleteByIds } from '/@/api/article/article.ts';
   export default defineComponent({
     name: 'article',
@@ -66,6 +66,8 @@ import { useRoute,useRouter } from 'vue-router'
       });
 
       function handleCreate() {
+        router.push('/addArticle')
+        return
         openModal(true, {
           isUpdate: false,
         });

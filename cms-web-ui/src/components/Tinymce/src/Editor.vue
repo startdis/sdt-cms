@@ -34,6 +34,7 @@
   import 'tinymce/plugins/hr';
   import 'tinymce/plugins/insertdatetime';
   import 'tinymce/plugins/link';
+  import 'tinymce/plugins/image';
   import 'tinymce/plugins/lists';
   import 'tinymce/plugins/media';
   import 'tinymce/plugins/nonbreaking';
@@ -52,7 +53,7 @@
   import 'tinymce/plugins/visualblocks';
   import 'tinymce/plugins/visualchars';
   import 'tinymce/plugins/wordcount';
-
+  import { ResultEnum } from '/@/enums/httpEnum';
   import {
     defineComponent,
     computed,
@@ -63,6 +64,7 @@
     onDeactivated,
     onBeforeUnmount,
   } from 'vue';
+  import { GetUploadLink } from '/@/api/sys/file'
   import ImgUpload from './ImgUpload.vue';
   import { toolbar, plugins } from './tinymce';
   import { buildShortUUID } from '/@/utils/uuid';
@@ -72,6 +74,7 @@
   import { isNumber } from '/@/utils/is';
   import { useLocale } from '/@/locales/useLocale';
   import { useAppStore } from '/@/store/modules/app';
+  import { Upload as uploadApi } from '/@/api/sys/file';
 
   const tinymceProps = {
     options: {
@@ -114,7 +117,7 @@
     components: { ImgUpload },
     inheritAttrs: false,
     props: tinymceProps,
-    emits: ['change', 'update:modelValue', 'inited', 'init-error'],
+    emits: ['change', 'update:modelValue', 'inited', 'init-error','changComponentType'],
     setup(props, { emit, attrs }) {
       const editorRef = ref<Nullable<Editor>>(null);
       const fullscreen = ref(false);
@@ -168,7 +171,39 @@
           setup: (editor: Editor) => {
             editorRef.value = editor;
             editor.on('init', (e) => initSetup(e));
+            if (options.componentType) {
+              editor.ui.registry.addButton('componentType', {
+                text: `${options.componentType == 'Editor' ? '使用 MD 编辑器' : '使用富文本编辑器'}`,
+                tooltip: `${options.componentType == 'Editor' ? '使用 MD 编辑器' : '使用富文本编辑器'}`,
+                icon:'settings',
+                onAction: () => {
+                  // 切换富文本还是MD
+                  options.changComponentType(options.componentType)
+                }
+              })
+            }
           },
+          images_upload_handler: (blobInfo, succFun, failFun) => {
+            console.log('blobInfoblobInfo', blobInfo);
+            let formData = new FormData();
+            let file = blobInfo.blob()
+            formData.append('file', file);
+            uploadApi({file}).then(async res => {
+              if (res.status !== 200) {
+                failFun('HTTP Error: ' + res.status);
+              } else {
+                if (res?.data?.code != ResultEnum.SUCCESS1) {
+                  failFun('Invalid JSON: ' + res.data.data.msg);
+                } else {
+                  const { fileUrl } = res?.data?.data;
+                  GetUploadLink({ expires: 30000, objectName: fileUrl }).then(url => {
+                    console.log('resres', name, url);
+                    succFun(url);
+                  })
+                }
+              }
+            })
+          }
         };
       });
 

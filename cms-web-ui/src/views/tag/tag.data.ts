@@ -2,7 +2,6 @@ import { Upload } from '/@/api/sys/file';
 import { BasicColumn } from '/@/components/Table';
 import { FormSchema } from '/@/components/Table';
 import { h } from 'vue';
-import { Tag } from 'ant-design-vue';
 export const columns: BasicColumn[] = [
   {
     title: '标签名称',
@@ -15,13 +14,6 @@ export const columns: BasicColumn[] = [
     title: '是否启用',
     dataIndex: 'status',
     width: 60,
-    customRender: ({ record }) => {
-      const status = record.status;
-      const enable = ~~status === 1;
-      const color = enable ? 'green' : 'red';
-      const text = enable ? '启用' : '停用';
-      return h(Tag, { color: color }, () => text);
-    },
   },
   {
     title: '创建时间',
