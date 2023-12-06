@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
+import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.util.List;
 
@@ -27,6 +28,7 @@ public class ArticlePostDTO implements Serializable {
      * 文章标题
      */
     @ApiModelProperty("文章标题")
+    @NotBlank(message = "文章标题不能为空!")
     private String title;
 
     /**
@@ -57,6 +59,7 @@ public class ArticlePostDTO implements Serializable {
      * 文章内容
      */
     @ApiModelProperty("文章内容")
+    @NotBlank(message = "文章内容不能为空!")
     private String content;
 
     /**

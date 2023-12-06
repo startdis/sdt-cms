@@ -9,11 +9,11 @@ spring:
       # 单个文件的最大值
       max-file-size: 100MB
   datasource:
-    # postgresql
-    url: jdbc:postgresql://192.168.10.100:5432/ydsz-fam-uat?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&useSSL=false&nullCatalogMeansCurrent=true
-    driver-class-name: org.postgresql.Driver
-    username: postgres
-    password: dianjiu63
+    # mysql
+    url: jdbc:mysql://1.13.21.54:3306/sdt-cms-uat?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&useSSL=false&nullCatalogMeansCurrent=true
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: ydsz1020
     type: com.alibaba.druid.pool.DruidDataSource
     # 下面为连接池的补充设置，应用到上面所有数据源中
     # 初始化大小，最小，最大
@@ -41,29 +41,27 @@ spring:
     use-global-data-source-stat: true
     # 通过connectProperties属性来打开mergeSql功能；慢SQL记录
     connect-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
-  redis:
-    database: 1
-    host: 192.168.10.100
-#    host: 146.56.199.179
-    password:
-    port: 6379
-#    port: 36379
-    jedis:
-      pool:
-        max-active: 8
-        max-idle: 8
-        min-idle: 0
-        timeout: 1000
+#  redis:
+#    database: 0
+#    host: 127.0.0.1
+#    password:
+#    port: 6379
+#    jedis:
+#      pool:
+#        max-active: 8
+#        max-idle: 8
+#        min-idle: 0
+#        timeout: 1000
 # MinIO
 minio:
   #对象存储服务的URL
-  url: http://146.56.199.179:29000
+  url: http://1.13.21.54:9000
   #账户
-  accessKey: admin
+  accessKey: ydsz
   #密码
-  secretKey: admin123456
+  secretKey: ydsz1020
   #存储桶
-  bucketName: ydsz-fam-local
+  bucketName: tdcd-local
 # 异步线程配置
 async:
   executor:

@@ -1,5 +1,7 @@
 package com.startdis.cms.server.service.impl;
 
+import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.collection.ListUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -59,6 +61,9 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         lambdaQuery.select(ArticleTags::getTagId);
         lambdaQuery.eq(ArticleTags::getArticleId, id);
         List<String> tagIds = articleTagsService.listObjs(lambdaQuery).stream().map(o -> (String) o).collect(Collectors.toList());
+        if (CollectionUtil.isEmpty(tagIds)){
+            return ListUtil.empty();
+        }
         //查询文章标签集合
         List<Tag> tags = tagService.listByIds(tagIds);
         return BeanCopyKits.coverList(tags, TagVO.class);
@@ -87,9 +92,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
      */
     @Override
     public void deleteArticleTag(String articleId) {
-        Map<String, Object> params = new HashMap<>();
-        params.put("articleId", articleId);
-        articleTagsService.removeByMap(params);
+        articleTagsService.remove(Wrappers.<ArticleTags>lambdaQuery().eq(ArticleTags::getArticleId, articleId));
     }
 
     @Override
