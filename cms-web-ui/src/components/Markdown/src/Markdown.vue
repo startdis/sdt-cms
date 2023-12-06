@@ -194,7 +194,7 @@ const {
 <style lang="less">
   .vditor-toolbar {
     .vditor-toolbar__item {
-      margin:0 .3rem !important;
+      margin:0.1rem .4rem !important;
     }
   }
 </style>

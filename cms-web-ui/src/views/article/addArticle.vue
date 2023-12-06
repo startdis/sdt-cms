@@ -59,16 +59,15 @@
       const [registerModal, { openModal }] = useModal();
       const [registerForm, { resetFields,resetSchema,updateSchema,setFieldsValue,getFieldsValue, validate }] = useForm({
         labelWidth: 100,
-        schemas: [],
+        schemas: [
+          ...formSchema,
+          ...formSchemaEditor
+        ],
         showActionButtonGroup: false,
       });
 
       async function initPage() {
         await resetFields();
-        resetSchema([
-          ...formSchema,
-          ...formSchemaMd
-        ])
         isUpdate.value = route.query.id ? true : false;
         if (unref(isUpdate)) {
           const res = await getInfo(route.query.id)
@@ -85,7 +84,7 @@
           closable: true,
           okCancel:true,
           onOk: () => {
-            if (componentType.value == 'MD') {
+            if (componentType.value == 'Md') {
               componentType.value = 'Editor'
               resetSchema([
                 ...formSchema,
@@ -98,6 +97,9 @@
                 ...formSchemaMd
               ])
             }
+            setFieldsValue({
+              content:''
+            })
           }
         })
       }
