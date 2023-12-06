@@ -8,7 +8,7 @@
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { BasicForm, Rule, useForm } from '/@/components/Form';
   import { formSchema } from './config.data';
-  import { Insert,Update } from '/@/api/config/config.ts';
+  import { Insert,UpdateBatch } from '/@/api/config/config.ts';
   import { CheckExistParams } from "/@/api/model/baseModel";
 
   export default defineComponent({
@@ -46,7 +46,7 @@
         try {
           const values = await validate();
           setModalProps({ confirmLoading: true });
-          let api = unref(isUpdate) ? Update : Insert
+          let api = unref(isUpdate) ? UpdateBatch : Insert
           await api(values);
           closeModal();
           emit('success');

@@ -36,7 +36,7 @@
   import { useModal } from '/@/components/Modal';
   import { columns, searchFormSchema } from './config.data';
   import configModal from './configModal.vue';
-  import { getconfigListByPage,Update, getconfigList,getInfo,deleteByIds } from '/@/api/config/config.ts';
+  import { getconfigListByPage,UpdateBatch, getconfigList,getInfo,deleteByIds } from '/@/api/config/config.ts';
 import { useRoute } from 'vue-router'
 import { Card } from 'ant-design-vue'
   import { BasicForm, Rule, useForm } from '/@/components/Form';
@@ -57,7 +57,7 @@ import { Card } from 'ant-design-vue'
         },
         submitFunc:(async ()=> {
           const data = await validate();
-          await Update(data);
+          await UpdateBatch(data);
         })
       });
       const route = useRoute()
@@ -130,6 +130,7 @@ import { Card } from 'ant-design-vue'
               label: item.name,
               required: false,
               component: 'Input',
+              defaultValue:item.value,
               colProps: {
                 span: 24,
               },

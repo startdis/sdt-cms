@@ -6,6 +6,7 @@ enum Api {
   List = '/config/list',
   Insert = '/config/add',
   Update = '/config/update',
+  UpdateBatch = '/config/updateBatch',
   Info = '/config/',
   Delete = '/config/delete',
 }
@@ -24,7 +25,10 @@ export const getInfo = (id?: number | string) =>
   defHttp.get<configInfo>({url: Api.Info+id});
   
 export const Update = (params?: configInfo) =>
-  defHttp.put<configInfo>({url: Api.Update, params});
+  defHttp.put<configInfo>({ url: Api.Update, params });
+
+export const UpdateBatch = (params?: configInfo) =>
+  defHttp.put<configInfo>({url: Api.UpdateBatch, params});
 
 export const deleteByIds = (params?: Array<string>) =>
   defHttp.deleteForm<configInfo>({url: Api.Delete, params});

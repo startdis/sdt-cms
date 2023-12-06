@@ -3,4 +3,4 @@
  */
 export const GLOB_CONFIG_FILE_NAME = '_app.config.js';
 
-export const OUTPUT_DIR = '../cms/cms-dist';
+export const OUTPUT_DIR = '../cms-web-ui/cms-dist';
