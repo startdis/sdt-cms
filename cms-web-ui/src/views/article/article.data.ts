@@ -148,13 +148,6 @@ export const formSchemaEditor: FormSchema[] = [
     componentProps: {
       height: 700,
       showImageUpload:false,
-      options: {
-        placeholder: '请输入文章内容',
-        componentType: 'Editor',
-        changComponentType: (E) => {
-          
-        }
-      },
     },
     colProps: {
       span: 24,
@@ -170,13 +163,6 @@ export const formSchemaMd: FormSchema[] = [
     componentProps: {
       height: 700,
       showImageUpload:false,
-      options: {
-        placeholder: '请输入文章内容',
-        componentType: 'MD',
-        changComponentType: (E) => {
-          
-        }
-      },
     },
     colProps: {
       span: 24,

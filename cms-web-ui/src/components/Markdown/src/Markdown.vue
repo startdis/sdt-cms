@@ -16,9 +16,15 @@
   import Vditor from 'vditor';
   import 'vditor/dist/index.css';
   import { useLocale } from '/@/locales/useLocale';
-  import { useModalContext } from '../../Modal';
+import { useModalContext } from '../../Modal';
+  import { toolbar } from './toolbar'
   import { useRootSetting } from '/@/hooks/setting/useRootSetting';
-  import { onMountedOrActivated } from '/@/hooks/core/onMountedOrActivated';
+import { onMountedOrActivated } from '/@/hooks/core/onMountedOrActivated';
+import { getAppEnvConfig } from '/@/utils/env';
+import { GetUploadLink,Upload } from '/@/api/sys/file'
+const {
+  VITE_GLOB_UPLOAD_URL,
+  } = getAppEnvConfig();
   import { getTheme } from './getTheme';
 
   type Lang = 'zh_CN' | 'en_US' | 'ja_JP' | 'ko_KR' | undefined;
@@ -96,6 +102,35 @@
           fullscreen: {
             index: 520,
           },
+          outline: {
+            enable: true,
+            position:'right'
+          },
+          upload: {
+            accept: 'image/*',
+            // url: VITE_GLOB_UPLOAD_URL,
+            // linkToImgUrl: VITE_GLOB_UPLOAD_URL,
+            headers: {
+              'X-SERVICE-TYPE': 'webService',
+              'X-GROUP-TENANT-ID':'1667075454562709506',
+              'X-COMPANY-TENANT-ID': '1667075454562709506',
+            },
+            fieldName: 'multipartFile',
+            handler:  (files) => {
+              const array = []
+              files.forEach(file => {
+                array.push(Upload({ file:file }))
+              })
+              Promise.all(array).then((list) => { 
+                console.log('listlist',list);
+                list.forEach(async (item) => {
+                  let res = await GetUploadLink({ expires: 30000, objectName: item.data.data.fileUrl })
+                  insEditor?.insertValue(`![${item.data.data.fileName}](${res})<br/>`); // 文本编辑器中插入图片
+                })
+              })
+            },
+          },
+          toolbar,
           preview: {
             theme: {
               // 设置内容主题
@@ -156,3 +191,10 @@
     },
   });
 </script>
+<style lang="less">
+  .vditor-toolbar {
+    .vditor-toolbar__item {
+      margin:0 .3rem !important;
+    }
+  }
+</style>

@@ -102,6 +102,8 @@ import { Switch } from 'ant-design-vue';
           createWarningModal({
             title: '提示',
             content: '确认停用？',
+            closable: true,
+            okCancel:true,
             onOk: () => {
               setLoading(true)
               Update({

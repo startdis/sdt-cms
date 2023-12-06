@@ -9,7 +9,10 @@
             </div>
             <div>
               <Button type="primary" shape="round" ghost class="mr-4" @click="submitContent(0)">保存草稿</Button>
-              <Button type="primary" shape="round"  @click="submitContent(1)">发布文章</Button>
+              <Button type="primary" shape="round" class="mr-4" @click="submitContent(1)">发布文章</Button>
+              <Tooltip :title="componentType == 'Md' ? '使用富文本编辑器' : '使用 MD 编辑器'" >
+                <SwapOutlined @click="changeComponentType" class="mr-4" style="font-size:1.2rem"></SwapOutlined>
+              </Tooltip>
             </div>
           </div>
         </template>
@@ -28,11 +31,12 @@
   import { formSchema,formSchemaEditor,formSchemaMd } from './article.data';
   import { Insert,Update,getInfo } from '/@/api/article/article.ts';
   import { PageWrapper } from '/@/components/Page';
-  import { Button,Input,Tag,Popover } from 'ant-design-vue'
+  import { Button,Input,Tag,Popover,Tooltip } from 'ant-design-vue'
   import articleModal from './articleModal.vue';
   import { useRoute,useRouter } from 'vue-router'
   import { useMessage } from '/@/hooks/web/useMessage';
   import { useTabs } from '/@/hooks/web/useTabs';
+  import { SwapOutlined } from '@ant-design/icons-vue'
   export default defineComponent({
     // beforeRouteEnter(to, from, next) {
     //   console.log('toto',to);
@@ -41,11 +45,12 @@
     //   }));
     // },
     name: 'articleModals',
-    components: { BasicModal,PageWrapper, BasicForm,Button,Input,Tag,Popover,articleModal},
+    components: { BasicModal,PageWrapper,SwapOutlined, BasicForm,Button,Input,Tag,Popover,articleModal,Tooltip},
     emits: ['success', 'register'],
     setup(_, { emit }) {
+      const componentType = ref('Editor');
       const { close } = useTabs();
-      const { createMessage } = useMessage()
+      const { createMessage,createWarningModal } = useMessage()
       const isUpdate = ref(false);
       const formData = ref({});
       const route = useRoute()
@@ -62,7 +67,7 @@
         await resetFields();
         resetSchema([
           ...formSchema,
-          ...formSchemaEditor
+          ...formSchemaMd
         ])
         isUpdate.value = route.query.id ? true : false;
         if (unref(isUpdate)) {
@@ -72,29 +77,29 @@
             ...res
           });
         }
-        await updateSchema([
-          {
-            field: 'content',
-            componentProps: {
-              options: {
-                changComponentType: (componentType) => {
-                  if (componentType == 'MD') {
-                    resetSchema([
-                      ...formSchema,
-                      ...formSchemaEditor
-                    ])
-                  } else {
-                    console.log(componentType);
-                    resetSchema([
-                      ...formSchema,
-                      ...formSchemaMd
-                    ])
-                  }
-                }
-              }
-            },
-          },
-        ]);
+      }
+      function changeComponentType() {
+        createWarningModal({
+          title: `${componentType.value == 'Md' ? '切换为富文本编辑器' : '切换为 MD 编辑器'}`,
+          content: '切换写作模式后，当前内容不会迁移。',
+          closable: true,
+          okCancel:true,
+          onOk: () => {
+            if (componentType.value == 'MD') {
+              componentType.value = 'Editor'
+              resetSchema([
+                ...formSchema,
+                ...formSchemaEditor
+              ])
+            } else {
+              componentType.value = 'Md'
+              resetSchema([
+                ...formSchema,
+                ...formSchemaMd
+              ])
+            }
+          }
+        })
       }
 
       onMounted(() => {
@@ -147,7 +152,7 @@
         router.push(`/article?id=${articleId}`)
       }
 
-      return { registerModal,registerForm,initPage, submitContent,handleSuccess};
+      return { registerModal,registerForm,componentType,initPage, submitContent,handleSuccess,changeComponentType};
     },
   });
 </script>
