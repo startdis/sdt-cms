@@ -202,7 +202,7 @@
               className: 'toolbar-right',
               click: (event: Event, vditor: IVditor) => {
                 const editCard = vditor.toolbar.elements.editCard
-                const previewCard = vditor.toolbar.elements.editCard.lastElementChild
+                const previewCard = vditor.toolbar.elements.previewCard.lastElementChild
                 editCard.lastElementChild.ariaLabel = `仅编辑区`
                 if (vditor.sv.element.style.display == 'none') {
                   vditor.sv.element.style.display = "block"
